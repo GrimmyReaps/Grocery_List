@@ -19,10 +19,11 @@ namespace Grocery_List
 
         public void SetDataSource(DataSet data)
         {
-            if (data.Tables.Count > 0)
-            {
-                dataGridView1.DataSource = data.Tables[0].DefaultView;
-            }
+            if (data != null)
+                if (data.Tables.Count > 0)
+                {
+                    dataGridView1.DataSource = data.Tables[0].DefaultView;
+                }
         }
 
         private void Form2_Load(object sender, EventArgs e)
