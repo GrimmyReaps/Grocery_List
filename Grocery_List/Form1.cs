@@ -43,28 +43,57 @@ namespace Grocery_List
                 label1.Text = "Disconnected";
                 label1.ForeColor = Color.DarkRed;
             }
-
-            //Fill the DataAdapter with information stating if table GROCERIES exists
-            cmd = new("select count(*) " +
-            "from user_tables " +
-            "where table_name='GROCERIES'", connection);
-            adapter = new(cmd);
-            adapter.Fill(data);
-            form2.SetDataSource(data);
-            //form2.Show();
-            //MessageBox.Show(form2.dataGridView1.Rows[0].Cells[0].Value.ToString());
+            try
+            {
+                //Fill the DataAdapter with information stating if table GROCERIES exists
+                cmd = new("select count(*) " +
+                "from user_tables " +
+                "where table_name='GROCERIES'", connection);
+                adapter = new(cmd);
+                adapter.Fill(data);
+                form2.SetDataSource(data);
+                //form2.Show();
+                //MessageBox.Show(form2.dataGridView1.Rows[0].Cells[0].Value.ToString());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
             //Check if the table indeed is in the Database
             if (!form2.dataGridView1.Rows[0].Cells[0].Value.ToString().Equals("0"))
             {
-                //if table exists get info from it
-                data = null;
-                form2.SetDataSource(data);
-                cmd = new("Select * FROM GROCERIES");
-                if (data != null)
+                try
                 {
-                    adapter.Fill(data);
-                    form2.SetDataSource(data);
+                    //if table exists get info from it
+                    cmd = new("Select Product, Price FROM GROCERIES", connection);
+                    OracleDataReader reader = cmd.ExecuteReader();
+                    string Price;
+                    string readData;
+                    string Placeholder;
+                    while (reader.Read())
+                    {
+                        Price = reader.GetString(1).Replace('.', ',');
+                        if(Price.Contains(','))
+                        {
+                            Placeholder = Price.Substring(Price.IndexOf(','));
+                            //MessageBox.Show(Placeholder);
+                            if (Placeholder.Length < 3)
+                            {
+                                Price = Price + "0";
+                            }
+                        }
+                        else
+                        {
+                            Price = Price + ",00";
+                        }
+                        readData = reader.GetString(0) + " " + Price + " PLN";
+                        this.checkedListBox1.Items.Add(readData);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
                 }
             }
             else
@@ -76,8 +105,6 @@ namespace Grocery_List
                 {  
                     cmd = new("CREATE TABLE GROCERIES (Product varchar(100), Price NUMBER(8,2))", connection);
                     cmd.ExecuteNonQuery();
-                    form2.dataGridView1.DataSource = null;
-                    form2.dataGridView1.Rows.Clear();
                 }
                 catch (Exception ex)
                 {
@@ -85,7 +112,9 @@ namespace Grocery_List
                 }
             }
             connection.Close();
+            this.button1.Enabled = false;
             this.button2.Enabled = true;
+            this.button3.Enabled = true;
         }
 
         public static OracleConnection GetConnection()
@@ -108,9 +137,35 @@ namespace Grocery_List
         {
             OracleConnection connection = GetConnection();
             connection.Open();
-            OracleCommand cmd = new OracleCommand("DROP TABLE GROCERIES", connection);
-            cmd.ExecuteNonQuery();
+            try
+            {
+                OracleCommand cmd = new OracleCommand("DROP TABLE GROCERIES", connection);
+                cmd.ExecuteNonQuery();
+            }
+            catch(OracleException OrEx)
+            {
+                MessageBox.Show("Database is already deleted");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
             connection.Close();
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            OracleConnection connection = GetConnection();
+            connection.Open();
+            try
+            {
+                OracleCommand cmd = new OracleCommand("Commit", connection);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

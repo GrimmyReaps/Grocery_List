@@ -1,4 +1,5 @@
 ﻿using Oracle.ManagedDataAccess.Client;
+using System.Text.RegularExpressions;
 
 namespace Grocery_List
 {
@@ -16,21 +17,54 @@ namespace Grocery_List
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //It's eaaier too see
+            string Product = this.textBox1.Text.ToString();
+            string Price = this.textBox2.Text.ToString();
+
+            //Check if Price is correct format also if someone uses , change it to .
+            if (Price.Length > 0 && Price.Length < 8 && RegexCheck(Price) == true)
+            {
+                Price = Price.Replace(',', '.');
+                //MessageBox.Show(Price);
+            }
+            else
+            {
+                MessageBox.Show("Incorrect price value");
+                return;
+            }
+
             OracleCommand cmd = new OracleCommand();
             OracleConnection connection = Form1.GetConnection();
             connection.Open();
             try
             {
                 cmd = new("INSERT INTO GROCERIES(Product, Price) " +
-                          "VALUES ('" + this.textBox1.Text.ToString() + "', " + double.Parse(this.textBox2.Text.ToString()) + ")", connection);
+                          "VALUES ('" + Product + "', " + Price + ")", connection);
                 cmd.ExecuteNonQuery();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + double.Parse(this.textBox2.Text.ToString()).ToString());
             }
+
+
+
             connection.Close();
             Close();
+        }
+        public static bool RegexCheck(string check)
+        {
+            string StrRegex = @"^[0-9]{1,4}[.,]{1}[0-9]{1,2}|[0-9]{1,4}$";
+            Regex rgx = new Regex(StrRegex);
+
+            if (rgx.IsMatch(check))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

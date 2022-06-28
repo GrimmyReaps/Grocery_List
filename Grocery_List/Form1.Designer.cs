@@ -75,6 +75,7 @@
             // 
             // button3
             // 
+            this.button3.Enabled = false;
             this.button3.Location = new System.Drawing.Point(611, 12);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(267, 55);
@@ -95,6 +96,7 @@
             this.Controls.Add(this.checkedListBox1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
