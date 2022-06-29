@@ -141,9 +141,12 @@ namespace Grocery_List
             Form4 form4 = new Form4();
             form4.fillPrompt(name);
             form4.GetHelper(name);
-            form4.ShowDialog();
 
-
+            DialogResult result = form4.ShowDialog();
+            if (result == DialogResult.Yes)
+            {
+                this.checkedListBox1.Items.RemoveAt(idx);
+            }
         }
 
 
