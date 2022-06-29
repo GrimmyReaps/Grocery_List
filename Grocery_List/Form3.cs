@@ -33,6 +33,12 @@ namespace Grocery_List
                 return;
             }
 
+            if (duplicateCheck(Product) == true)
+            {
+                MessageBox.Show("Name like that exists in database please choose a different name");
+                return;
+            }
+
             OracleCommand cmd = new OracleCommand();
             OracleConnection connection = Form1.GetConnection();
             connection.Open();
@@ -47,14 +53,19 @@ namespace Grocery_List
                 MessageBox.Show(ex.Message + double.Parse(this.textBox2.Text.ToString()).ToString());
             }
 
+            Price.Replace('.', ',');
+            Price = Form1.correction(Price);
+            string finalForm = Product + " " + Price + " PLN";
 
+            Form1 form1 = (Form1)Application.OpenForms["Form1"];
+            form1.addItem(finalForm);
 
             connection.Close();
             Close();
         }
-        public static bool RegexCheck(string check)
+        private bool RegexCheck(string check)
         {
-            string StrRegex = @"^[0-9]{1,4}[.,]{1}[0-9]{1,2}|[0-9]{1,4}$";
+            string StrRegex = @"^(?:[0-9]{1,4}[.,]{1}[0-9]{1,2}|[0-9]{1,4})$";
             Regex rgx = new Regex(StrRegex);
 
             if (rgx.IsMatch(check))
@@ -65,6 +76,42 @@ namespace Grocery_List
             {
                 return false;
             }
+        }
+        public void refreshWindow()
+        {
+            this.textBox1.Clear();
+            this.textBox2.Clear();
+            this.textBox1.Focus();
+        }
+
+        private bool duplicateCheck(string question)
+        {
+            OracleCommand cmd = new OracleCommand();
+            OracleConnection connection = Form1.GetConnection();
+            connection.Open();
+
+            try
+            {
+                cmd = new("SELECT Product FROM GROCERIES", connection);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            OracleDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                if (reader.GetString(0).Equals(question))
+                {
+                    connection.Close();
+                    return true;
+                }
+            }
+
+            connection.Close();
+            return false;
         }
     }
 }

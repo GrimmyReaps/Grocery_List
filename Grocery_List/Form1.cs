@@ -70,25 +70,12 @@ namespace Grocery_List
                     OracleDataReader reader = cmd.ExecuteReader();
                     string Price;
                     string readData;
-                    string Placeholder;
                     while (reader.Read())
                     {
                         Price = reader.GetString(1).Replace('.', ',');
-                        if(Price.Contains(','))
-                        {
-                            Placeholder = Price.Substring(Price.IndexOf(','));
-                            //MessageBox.Show(Placeholder);
-                            if (Placeholder.Length < 3)
-                            {
-                                Price = Price + "0";
-                            }
-                        }
-                        else
-                        {
-                            Price = Price + ",00";
-                        }
+                        Price = correction(Price);
                         readData = reader.GetString(0) + " " + Price + " PLN";
-                        this.checkedListBox1.Items.Add(readData);
+                        addItem(readData);
                     }
                 }
                 catch(Exception ex)
@@ -115,22 +102,14 @@ namespace Grocery_List
             this.button1.Enabled = false;
             this.button2.Enabled = true;
             this.button3.Enabled = true;
-        }
-
-        public static OracleConnection GetConnection()
-        {
-            return new OracleConnection("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)" +
-                                                                   "(HOST=155.158.112.45)" +
-                                                                   "(PORT=1521))" +
-                                                                   " (CONNECT_DATA=(SERVICE_NAME=oltpstud)));" +
-                                                                   "User Id=msbd13;" +
-                                                                   "Password=haslo2022;");
+            this.button4.Enabled = true;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             Form3 form3 = new Form3();
             form3.ShowDialog();
+            form3.refreshWindow();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -153,6 +132,21 @@ namespace Grocery_List
             connection.Close();
         }
 
+        private void button4_Click(object sender, EventArgs e)
+        {
+            int idx = checkedListBox1.SelectedIndex;
+            string name = checkedListBox1.Items[idx].ToString();
+            name = name.Substring(0, name.IndexOf(' '));
+            //MessageBox.Show(name);
+            Form4 form4 = new Form4();
+            form4.fillPrompt(name);
+            form4.GetHelper(name);
+            form4.ShowDialog();
+
+
+        }
+
+
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             OracleConnection connection = GetConnection();
@@ -167,5 +161,40 @@ namespace Grocery_List
                 MessageBox.Show(ex.Message);
             }
         }
+        public static OracleConnection GetConnection()
+        {
+            return new OracleConnection("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)" +
+                                                                   "(HOST=155.158.112.45)" +
+                                                                   "(PORT=1521))" +
+                                                                   " (CONNECT_DATA=(SERVICE_NAME=oltpstud)));" +
+                                                                   "User Id=msbd13;" +
+                                                                   "Password=haslo2022;");
+        }
+
+        public void addItem(string newItem)
+        {
+            this.checkedListBox1.Items.Add(newItem);
+        }
+
+        public static string correction(string toCorrect)
+        {
+            string Placeholder;
+            if (toCorrect.Contains(','))
+            {
+                Placeholder = toCorrect.Substring(toCorrect.IndexOf(','));
+                //MessageBox.Show(Placeholder);
+                if (Placeholder.Length < 3)
+                {
+                    toCorrect = toCorrect + "0";
+                }
+            }
+            else
+            {
+                toCorrect = toCorrect + ",00";
+            }
+
+            return toCorrect;
+        }
+
     }
 }
