@@ -66,7 +66,7 @@ namespace Grocery_List
                 try
                 {
                     //if table exists get info from it
-                    cmd = new("Select Product, Price FROM GROCERIES", connection);
+                    cmd = new("SELECT Product, Price FROM GROCERIES ORDER BY lower(Product) ASC", connection);
                     OracleDataReader reader = cmd.ExecuteReader();
                     string Price;
                     string readData;
@@ -103,6 +103,9 @@ namespace Grocery_List
             this.button2.Enabled = true;
             this.button3.Enabled = true;
             this.button4.Enabled = true;
+            this.button5.Enabled = true;
+
+            this.checkedListBox1.SelectedIndex = 0;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -116,20 +119,36 @@ namespace Grocery_List
         {
             OracleConnection connection = GetConnection();
             connection.Open();
-            try
+            DialogResult dialogResult = MessageBox.Show("Do you wish to delete whole database?", "Purging", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
             {
-                OracleCommand cmd = new OracleCommand("DROP TABLE GROCERIES", connection);
-                cmd.ExecuteNonQuery();
+                try
+                {
+                    OracleCommand cmd = new OracleCommand("DROP TABLE GROCERIES", connection);
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OracleException OrEx)
+                {
+                    MessageBox.Show("Database is already deleted");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                connection.Close();
+
+                this.checkedListBox1.Items.Clear();
+                this.button1.Enabled = true;
+                this.button2.Enabled = false;
+                this.button3.Enabled = false;
+                this.button4.Enabled = false;
+                this.button5.Enabled = false;
+
             }
-            catch(OracleException OrEx)
+            else if (dialogResult == DialogResult.No)
             {
-                MessageBox.Show("Database is already deleted");
+                return;
             }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            connection.Close();
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -148,6 +167,27 @@ namespace Grocery_List
                 this.checkedListBox1.Items.RemoveAt(idx);
             }
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Form5 form5 = new Form5();
+            string Name;
+            string Price;
+            int idx = checkedListBox1.SelectedIndex;
+            string Product = checkedListBox1.Items[idx].ToString();
+
+            Name = Product.Substring(0, Product.IndexOf(' '));
+            Price = Product.Substring((Product.IndexOf(' ') + 1), (Product.LastIndexOf(' ') - (Product.IndexOf(' ') + 1)));
+            //MessageBox.Show(Price);
+
+            form5.SetText(Name, Price);
+            DialogResult result = form5.ShowDialog();
+            if (result == DialogResult.Yes)
+            {
+                this.checkedListBox1.Items.RemoveAt(idx);
+            }
+        }
+
 
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)

@@ -17,12 +17,12 @@ namespace Grocery_List
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //It's eaaier too see
+            //It's easier too see
             string Product = this.textBox1.Text.ToString();
             string Price = this.textBox2.Text.ToString();
 
             //Check if Price is correct format also if someone uses , change it to .
-            if (Price.Length > 0 && Price.Length < 8 && RegexCheck(Price) == true)
+            if (Price.Length > 0 && Price.Length < 8 && RegexPriceCheck(Price) == true)
             {
                 Price = Price.Replace(',', '.');
                 //MessageBox.Show(Price);
@@ -30,6 +30,12 @@ namespace Grocery_List
             else
             {
                 MessageBox.Show("Incorrect price value");
+                return;
+            }
+
+            if (RegexProductCheck(Product) == false)
+            {
+                MessageBox.Show("Product can't include spaces");
                 return;
             }
 
@@ -53,7 +59,7 @@ namespace Grocery_List
                 MessageBox.Show(ex.Message + double.Parse(this.textBox2.Text.ToString()).ToString());
             }
 
-            Price.Replace('.', ',');
+            Price = Price.Replace('.', ',');
             Price = Form1.correction(Price);
             string finalForm = Product + " " + Price + " PLN";
 
@@ -63,7 +69,7 @@ namespace Grocery_List
             connection.Close();
             Close();
         }
-        private bool RegexCheck(string check)
+        public bool RegexPriceCheck(string check)
         {
             string StrRegex = @"^(?:[0-9]{1,4}[.,]{1}[0-9]{1,2}|[0-9]{1,4})$";
             Regex rgx = new Regex(StrRegex);
@@ -77,6 +83,22 @@ namespace Grocery_List
                 return false;
             }
         }
+
+        public bool RegexProductCheck(string check)
+        {
+            string StrRegex = @"^(?:[^ ]{1,})$";
+            Regex rgx = new Regex(StrRegex);
+
+            if (rgx.IsMatch(check))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public void refreshWindow()
         {
             this.textBox1.Clear();
@@ -84,7 +106,7 @@ namespace Grocery_List
             this.textBox1.Focus();
         }
 
-        private bool duplicateCheck(string question)
+        public bool duplicateCheck(string question)
         {
             OracleCommand cmd = new OracleCommand();
             OracleConnection connection = Form1.GetConnection();
