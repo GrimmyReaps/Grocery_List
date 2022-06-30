@@ -252,14 +252,6 @@ namespace Grocery_List
             else 
             {
                 checkedItems.Remove(checkedListBox1.Items[e.Index].ToString());
-                //foreach (string item in checkedItems)
-                //{
-                    //placeholder = item.Substring(item.IndexOf(" ") + 1, item.LastIndexOf(" ") + (item.IndexOf(" ") + 1));
-                    //placeholder = placeholder.Replace(',', '.');
-                    //finalPrice = finalPrice - double.Parse(placeholder);
-
-                    //label2.Text = "Total groceries cost: " + finalPrice.ToString(); ;
-                //}
             }
 
             foreach (string item in checkedItems)
