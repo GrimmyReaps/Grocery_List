@@ -5,6 +5,7 @@ namespace Grocery_List
 {
     public partial class Form1 : Form
     {
+
         public Form1()
         {
             InitializeComponent();
@@ -192,21 +193,82 @@ namespace Grocery_List
                 try
                 {
                     string strPath = Environment.GetFolderPath(System.Environment.SpecialFolder.DesktopDirectory);
-                    FileStream fs = new FileStream(strPath, FileMode.OpenOrCreate, FileAccess.Write);
+                    FileStream fs = new FileStream(strPath + @"\List.txt", FileMode.Truncate, FileAccess.Write);
                     StreamWriter sw = new StreamWriter(fs);
-                    string[] checkedtitles = new string[checkedListBox1.CheckedItems.Count];
+                    string[] checkedProducts = new string[checkedListBox1.CheckedItems.Count];
                     for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
                     {
-                        checkedtitles[i] = checkedListBox1.CheckedItems[i].ToString();
+                        checkedProducts[i] = checkedListBox1.CheckedItems[i].ToString();
+                        //MessageBox.Show(checkedtitles[i]);
                     }
-                    string selectedProducts = String.Join(Environment.NewLine, checkedtitles);
+                    string selectedProducts = String.Join(Environment.NewLine, checkedProducts);
+
 
                     sw.Write(selectedProducts);
+                    sw.Flush();
+
+                    Close();
+                }
+                catch (FileNotFoundException nfex) 
+                {
+                    string strPath = Environment.GetFolderPath(System.Environment.SpecialFolder.DesktopDirectory);
+                    FileStream fs = new FileStream(strPath + @"\List.txt", FileMode.Create, FileAccess.Write);
+                    StreamWriter sw = new StreamWriter(fs);
+                    string[] checkedProducts = new string[checkedListBox1.CheckedItems.Count];
+                    for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
+                    {
+                        checkedProducts[i] = checkedListBox1.CheckedItems[i].ToString();
+                        //MessageBox.Show(checkedtitles[i]);
+                    }
+                    string selectedProducts = String.Join(Environment.NewLine, checkedProducts);
+
+
+                    sw.Write(selectedProducts);
+                    sw.Flush();
+
+                    Close();
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
+            }
+
+        }
+
+        private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            string placeholder = "";
+            double finalPrice = 0;
+
+            List<string> checkedItems = new List<string>();
+            foreach (var item in checkedListBox1.CheckedItems)
+                checkedItems.Add(item.ToString());
+
+            if (e.NewValue == CheckState.Checked)
+            {
+                checkedItems.Add(checkedListBox1.Items[e.Index].ToString());
+            }
+            else 
+            {
+                checkedItems.Remove(checkedListBox1.Items[e.Index].ToString());
+                //foreach (string item in checkedItems)
+                //{
+                    //placeholder = item.Substring(item.IndexOf(" ") + 1, item.LastIndexOf(" ") + (item.IndexOf(" ") + 1));
+                    //placeholder = placeholder.Replace(',', '.');
+                    //finalPrice = finalPrice - double.Parse(placeholder);
+
+                    //label2.Text = "Total groceries cost: " + finalPrice.ToString(); ;
+                //}
+            }
+
+            foreach (string item in checkedItems)
+            {
+                placeholder = item.Substring(item.IndexOf(" ") + 1, item.LastIndexOf(" ") + (item.IndexOf(" ") + 1));
+                placeholder = placeholder.Replace(',', '.');
+                finalPrice = finalPrice + double.Parse(placeholder);
+
+                label2.Text = "Total groceries cost: " + finalPrice.ToString(); ;
             }
 
         }

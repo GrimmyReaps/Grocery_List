@@ -46,6 +46,7 @@
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(603, 774);
             this.checkedListBox1.TabIndex = 0;
+            this.checkedListBox1.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
             // 
             // button1
             // 
@@ -115,9 +116,8 @@
             this.label2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label2.Location = new System.Drawing.Point(611, 114);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(194, 23);
+            this.label2.Size = new System.Drawing.Size(0, 23);
             this.label2.TabIndex = 7;
-            this.label2.Text = "Total groceries amount: ";
             // 
             // button6
             // 
