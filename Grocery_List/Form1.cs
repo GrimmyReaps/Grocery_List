@@ -180,7 +180,7 @@ namespace Grocery_List
 
             form5.SetText(Name, Price);
             DialogResult result = form5.ShowDialog();
-            if (result == DialogResult.Yes)
+            if (result == DialogResult.OK)
             {
                 this.checkedListBox1.Items.RemoveAt(idx);
             }

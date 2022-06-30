@@ -56,7 +56,7 @@ namespace Grocery_List
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + double.Parse(this.textBox2.Text.ToString()).ToString());
+                MessageBox.Show(ex.Message /*+ double.Parse(this.textBox2.Text.ToString()).ToString()*/);
             }
 
             Price = Price.Replace('.', ',');
