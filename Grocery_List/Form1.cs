@@ -15,10 +15,6 @@ namespace Grocery_List
 
         }
 
-        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -104,6 +100,7 @@ namespace Grocery_List
             this.button3.Enabled = true;
             this.button4.Enabled = true;
             this.button5.Enabled = true;
+            this.button6.Enabled = true;
 
             this.checkedListBox1.SelectedIndex = 0;
         }
@@ -143,7 +140,7 @@ namespace Grocery_List
                 this.button3.Enabled = false;
                 this.button4.Enabled = false;
                 this.button5.Enabled = false;
-
+                this.button6.Enabled = false;
             }
             else if (dialogResult == DialogResult.No)
             {
@@ -188,7 +185,31 @@ namespace Grocery_List
             }
         }
 
+        private void button6_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("This will close the program.\r\n Generate the list?", "Generate", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes) {
+                try
+                {
+                    string strPath = Environment.GetFolderPath(System.Environment.SpecialFolder.DesktopDirectory);
+                    FileStream fs = new FileStream(strPath, FileMode.OpenOrCreate, FileAccess.Write);
+                    StreamWriter sw = new StreamWriter(fs);
+                    string[] checkedtitles = new string[checkedListBox1.CheckedItems.Count];
+                    for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
+                    {
+                        checkedtitles[i] = checkedListBox1.CheckedItems[i].ToString();
+                    }
+                    string selectedProducts = String.Join(Environment.NewLine, checkedtitles);
 
+                    sw.Write(selectedProducts);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+
+        }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -238,6 +259,5 @@ namespace Grocery_List
 
             return toCorrect;
         }
-
     }
 }
