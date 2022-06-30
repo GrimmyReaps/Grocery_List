@@ -264,11 +264,11 @@ namespace Grocery_List
 
             foreach (string item in checkedItems)
             {
-                placeholder = item.Substring(item.IndexOf(" ") + 1, item.LastIndexOf(" ") + (item.IndexOf(" ") + 1));
+                placeholder = item.Substring(item.IndexOf(" ") + 1, item.LastIndexOf(" ") - (item.IndexOf(" ") + 1));
                 placeholder = placeholder.Replace(',', '.');
                 finalPrice = finalPrice + double.Parse(placeholder);
 
-                label2.Text = "Total groceries cost: " + finalPrice.ToString(); ;
+                label2.Text = "Total groceries cost: " + finalPrice.ToString() + " PLN";
             }
 
         }
