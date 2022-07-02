@@ -103,7 +103,14 @@ namespace Grocery_List
             this.button5.Enabled = true;
             this.button6.Enabled = true;
 
-            this.checkedListBox1.SelectedIndex = 0;
+            try
+            {
+                this.checkedListBox1.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -177,7 +184,7 @@ namespace Grocery_List
             Name = Product.Substring(0, Product.IndexOf(' '));
             Price = Product.Substring((Product.IndexOf(' ') + 1), (Product.LastIndexOf(' ') - (Product.IndexOf(' ') + 1)));
             //MessageBox.Show(Price);
-
+            
             form5.SetText(Name, Price);
             DialogResult result = form5.ShowDialog();
             if (result == DialogResult.OK)
@@ -233,7 +240,6 @@ namespace Grocery_List
                     MessageBox.Show(ex.Message);
                 }
             }
-
         }
 
         private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
