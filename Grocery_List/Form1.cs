@@ -291,8 +291,8 @@ namespace Grocery_List
                                                                    "(HOST=155.158.112.45)" +
                                                                    "(PORT=1521))" +
                                                                    " (CONNECT_DATA=(SERVICE_NAME=oltpstud)));" +
-                                                                   "User Id=msbd13;" +
-                                                                   "Password=haslo2022;");
+                                                                   "User Id=MyID;" +        //Remember to change those
+                                                                   "Password=MyPassword;");
         }
 
         public void addItem(string newItem)
