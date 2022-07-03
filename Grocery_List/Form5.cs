@@ -66,7 +66,7 @@ namespace Grocery_List
             connection.Open();
             try
             {
-                cmd = new("UPDATE GROCERIES" +
+                cmd = new("UPDATE GROCERIES " +
                           "SET Product='" + NewProduct + "', Price=" + NewPrice +
                           "WHERE Price='" + Price + "'", connection);
                 cmd.ExecuteNonQuery();
