@@ -114,6 +114,10 @@ namespace Grocery_List
             Form3 form3 = new Form3();
             form3.ShowDialog();
             form3.refreshWindow();
+            if (checkedListBox1.Items.Count.Equals(0) == false)
+            {
+                this.checkedListBox1.SelectedIndex = 0;
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -148,6 +152,10 @@ namespace Grocery_List
             }
             else if (dialogResult == DialogResult.No)
             {
+                if (checkedListBox1.Items.Count.Equals(0) == false)
+                {
+                    this.checkedListBox1.SelectedIndex = 0;
+                }
                 return;
             }
         }
@@ -166,6 +174,11 @@ namespace Grocery_List
             if (result == DialogResult.Yes)
             {
                 this.checkedListBox1.Items.RemoveAt(idx);
+            }
+
+            if (checkedListBox1.Items.Count.Equals(0) == false)
+            {
+                this.checkedListBox1.SelectedIndex = 0;
             }
         }
 
@@ -186,6 +199,11 @@ namespace Grocery_List
             if (result == DialogResult.OK)
             {
                 this.checkedListBox1.Items.RemoveAt(idx);
+            }
+
+            if (checkedListBox1.Items.Count.Equals(0) == false)
+            {
+                this.checkedListBox1.SelectedIndex = 0;
             }
         }
 

@@ -33,6 +33,15 @@ namespace Grocery_List
             string NewProduct = this.textBox1.Text.ToString();
             string NewPrice = this.textBox2.Text.ToString();
 
+
+            if (NewProduct.Equals(String.Empty))
+            {
+                NewProduct = Product;
+            }
+            if (NewPrice.Equals(String.Empty))
+            {
+                NewPrice = Price;
+            }
             //Check if Price is correct format also if someone uses , change it to .
             if (NewPrice.Length > 0 && NewPrice.Length < 8 && form3.RegexPriceCheck(NewPrice) == true)
             {
@@ -67,8 +76,8 @@ namespace Grocery_List
             try
             {
                 cmd = new("UPDATE GROCERIES " +
-                          "SET Product='" + NewProduct + "', Price=" + NewPrice +
-                          "WHERE Price='" + Price + "'", connection);
+                          "SET Product='" + NewProduct + "', Price= " + NewPrice +
+                          " WHERE Product='" + Product + "'", connection);
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
