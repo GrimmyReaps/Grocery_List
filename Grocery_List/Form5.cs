@@ -51,7 +51,11 @@ namespace Grocery_List
                 return;
             }
 
-            if (form3.duplicateCheck(NewProduct) == true)
+            if (Product.Equals(NewProduct))
+            {
+                //Nothing to see here moving on
+            }
+            else if (form3.duplicateCheck(NewProduct) == true)
             {
                 MessageBox.Show("Please choose another name");
                 return;

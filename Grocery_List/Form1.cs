@@ -79,6 +79,8 @@ namespace Grocery_List
                 {
                     MessageBox.Show(ex.Message);
                 }
+
+                this.checkedListBox1.SelectedIndex = 0;
             }
             else
             {
@@ -103,14 +105,6 @@ namespace Grocery_List
             this.button5.Enabled = true;
             this.button6.Enabled = true;
 
-            try
-            {
-                this.checkedListBox1.SelectedIndex = 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -291,8 +285,8 @@ namespace Grocery_List
                                                                    "(HOST=155.158.112.45)" +
                                                                    "(PORT=1521))" +
                                                                    " (CONNECT_DATA=(SERVICE_NAME=oltpstud)));" +
-                                                                   "User Id=MyID;" +        //Remember to change those
-                                                                   "Password=MyPassword;");
+                                                                   "User Id=msbd13;" +        //Remember to change those
+                                                                   "Password=haslo2022;");
         }
 
         public void addItem(string newItem)
