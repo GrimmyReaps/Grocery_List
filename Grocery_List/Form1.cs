@@ -79,8 +79,10 @@ namespace Grocery_List
                 {
                     MessageBox.Show(ex.Message);
                 }
-
-                this.checkedListBox1.SelectedIndex = 0;
+                if (checkedListBox1.Items.Count.Equals(0) == false)
+                {
+                    this.checkedListBox1.SelectedIndex = 0;
+                }
             }
             else
             {
